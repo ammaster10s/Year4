@@ -3,6 +3,7 @@ numpy
 matplotlib 
 morphsnakes
 scikit-image
+scikit-learn
 opencv-python
 pycocotools
 tqdm
