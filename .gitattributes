@@ -1,3 +1,4 @@
 # Auto detect text files and perform LF normalization
 * text=auto
 Eval.ipynb filter=lfs diff=lfs merge=lfs -text
+Eval_copy.ipynb filter=lfs diff=lfs merge=lfs -text
