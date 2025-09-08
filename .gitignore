@@ -2,3 +2,6 @@
 CNVresearch/Models/deeplabv3_plus_ultra_model_2025_02_10_01_37_48.keras
 *.png
 *.npy
+
+/QMUL/Dataset
+/QMUL/DatasetSplit
