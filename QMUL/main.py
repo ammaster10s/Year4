@@ -9,7 +9,7 @@ import base64
 from inference_sdk import InferenceHTTPClient
 from dotenv import load_dotenv
 
-# -------------------- Hair Removal -------------------- #
+# Hair Removal Function -- Demo
 def remove_hair(images, cfg=None):
     """Removes hair from lesion images using morphological filtering + inpainting."""
     if cfg is None:
@@ -59,7 +59,7 @@ def remove_hair(images, cfg=None):
     return img_filtered_all
 
 
-# -------------------- Streamlit UI -------------------- #
+# Streamlit App UI
 st.set_page_config(page_title="Skin Lesion Analyzer", layout="wide")
 st.title("🩺 Skin Lesion Analyzer")
 st.write("Upload a dermoscopic image. The app will remove hair, then send it to Roboflow for segmentation + classification.")
@@ -112,7 +112,7 @@ if uploaded_file is not None:
             use_cache=True
         )
 
-    # ---------------- Parse first model ---------------- #
+# First model predictions
     label_1, confidence_1, img_np_1 = "Unknown", 0.0, None
     if isinstance(result, list) and len(result) > 0:
         data = result[0]
@@ -139,8 +139,7 @@ if uploaded_file is not None:
             img_bytes = base64.b64decode(img_b64)
             img_np_1 = np.array(Image.open(io.BytesIO(img_bytes)))
 
-    # ---------------- Parse second model ---------------- #
-
+# Model Predictions Second Model
 label_2, confidence_2, img_np_2 = "Unknown", 0.0, None
 
 if isinstance(result_2, list) and len(result_2) > 0:
@@ -162,7 +161,7 @@ if isinstance(result_2, list) and len(result_2) > 0:
     except Exception as e:
         st.warning(f"Model 2 parsing error: {e}")
 
-    # ---------------- Layout Grid ---------------- #
+# Layout grid
     top1, top2 = st.columns(2)
     with top1:
         st.image(image, caption="Original Image", width="stretch")

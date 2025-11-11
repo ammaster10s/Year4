@@ -12,3 +12,5 @@ CNVresearch/Models/deeplabv3_plus_ultra_model_2025_02_10_01_37_48.keras
 .env
 .env
 .env
+/QMUL/.venv
+QMUL/best_specialist_model_stage1_Finetune_Code2.keras

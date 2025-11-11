@@ -1,8 +1,8 @@
-%%writefile streamlit_app.py
 # ================================================================
 # streamlit_app.py — Skin Lesion Two-Stage Classification Demo
 # ================================================================
 
+from time import time
 import streamlit as st
 import numpy as np
 import cv2, os
@@ -147,7 +147,7 @@ st.title("Skin Lesion Two-Stage Classification System")
 st.write("Stage 1: Roboflow Benign/Malignant Detection → Stage 2: Benign Sub-class Prediction")
 
 # --- Configuration (predefined) ---
-MODEL_PATH = "/content/drive/MyDrive/QMUL_SkinLesion/best_specialist_model_stage1_Finetune_Code2.keras"
+MODEL_PATH = "/Users/ammaster10/Documents/Github/Year4/QMUL/best_specialist_model_stage1_Finetune_Code2.keras"
 API_KEY = "BhquO0k4o5JNlJLjVP5s"
 
 # --- Load Stage 2 Model Once ---
@@ -166,16 +166,26 @@ uploaded_file = st.file_uploader("Upload a Skin Lesion Image", type=["jpg", "jpe
 
 if uploaded_file:
     img = Image.open(uploaded_file).convert("RGB")
-    st.image(img, caption="Uploaded Image", use_column_width=True)
+    st.image(img, caption="Uploaded Image", use_container_width=True)
     tmp_path = "temp_uploaded_image.jpg"
     img.save(tmp_path)
 
     if st.button("Run Two-Stage Inference"):
         # Stage 1
         st.subheader(" Stage 1: Benign vs Malignant Detection")
-        client = InferenceHTTPClient(api_url="https://serverless.roboflow.com", api_key=API_KEY)
-        result = run_roboflow_workflow(client, tmp_path)
+        # client = InferenceHTTPClient(api_url="https://serverless.roboflow.com", api_key=API_KEY)
+        # result = run_roboflow_workflow(client, tmp_path)
+        # --- Mock Stage 1 result for offline testing ---
+        result = [{
+            "predictions": {
+                "prediction_type": "classification",
+                "top": "Benign",
+                "confidence": 0.93
+            }
+        }]
         if result:
+            import time
+            time.sleep(1)
             stage1_class, stage1_conf = parse_roboflow_workflow_result(result)
             if stage1_class:
                 st.write(f"**Stage 1 Result:** {stage1_class} ({stage1_conf:.2%})")
@@ -188,10 +198,15 @@ if uploaded_file:
                     resized = cv2.resize(enhanced, (256, 256))
                     batch = np.expand_dims(efficientnet_preprocess(resized), axis=0)
                     pred = model.predict(batch)[0]
-                    class_names = ['ISIC-BenignOther', 'ISIC-Cherry', 'ISIC-images_Nevus', 'ISIC-images_SeborrheicKeratosis']
+                    
+                    class_names = ['BenignOther', 'Cherry', 'Nevus', 'SeborrheicKeratosis']
                     idx = np.argmax(pred)
                     st.success(f"Predicted Sub-type: **{class_names[idx]}** ({pred[idx]:.2%})")
-                    st.bar_chart(pred)
+                    import pandas as pd
+
+                    class_names = ['BenignOther', 'Cherry', 'Nevus', 'SeborrheicKeratosis']
+                    df = pd.DataFrame(pred, index=class_names, columns=["Probability"])
+                    st.bar_chart(df)
                 else:
                     st.warning("Classified as Malignant — Stage 2 skipped.")
             else:
