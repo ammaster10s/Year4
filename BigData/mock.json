@@ -1,0 +1,25 @@
+[
+    {
+        "timestamp": "2015-02-23T13:34:39.964626+00:00",
+        "duration_seconds": 2.995283037,
+        "activity": "stand",
+        "confidence": 0.815,
+        "user": "a"
+    },
+    {
+        "timestamp": "2015-02-23T13:34:42.964945+00:00",
+        "duration_seconds": 2.996034861,
+        "activity": "stand",
+        "confidence": 0.795,
+        "user": "a"
+    },
+    {
+        "timestamp": "2015-02-23T13:34:45.966046+00:00",
+        "duration_seconds": 2.99674766,
+        "activity": "stand",
+        "confidence": 0.745,
+        "user": "a"
+    }
+]
+
+
